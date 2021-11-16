@@ -1,0 +1,15 @@
+GET http://localhost:3000/users
+###
+GET http://localhost:3000/
+###
+POST http://localhost:3000/users
+Content-Type: application/json
+{
+    "nom":"ali",
+    "email" : "alith@esprit.tn",
+    "password": "12345",
+    "id" : "56"
+}
+###
+
+DELETE http://localhost:3000/users/
