@@ -10,6 +10,6 @@ const userSchema = new mongoose.Schema({
     //team:
 });
 
-const User = mongoose.model('User', userSchema);
+const User1 = mongoose.model('User1', userSchema);
 
-module.exports = User;
+module.exports = User1;

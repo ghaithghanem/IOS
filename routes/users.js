@@ -1,11 +1,11 @@
 var express = require('express');
 var router = express.Router();
-var User = require('../models/user.model.js');
+var User1 = require('../models/user.model.js');
 
 //Geting all Users
 router.get('/', async (req, res) => {
   try {
-    const user = await User.find()
+    const user = await User1.find()
     res.json(user)
   } catch (err) {
     res.status(500).json({ message: err.message })
@@ -17,7 +17,7 @@ router.get('/:id', getUser, (req, res) => {
 })
 //Creatin User
 router.route("/register").post((req, res) => {
-  User.findOne({id: req.body.id}).then(user => {
+  User1.findOne({id: req.body.id}).then(user => {
       if (!user) {
           var user = new User({
               nom: req.body.nom,
@@ -36,7 +36,7 @@ router.route("/register").post((req, res) => {
 });
 //Deleting user
 router.route('/:id').delete((req, res) => {
-  User.findByIdAndDelete(req.params.id)
+  User1.findByIdAndDelete(req.params.id)
     .then(() => res.json('User with id='+req.params.id+' deleted.'))
     .catch(err => res.status(400).json('Error: ' + err));
 });
