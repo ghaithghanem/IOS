@@ -1,5 +1,5 @@
-BackEnd
-1) Creation d'un serveur NodeJs qui communique avec une DB MongoDB .
+#BackEnd
+##1) Creation d'un serveur NodeJs qui communique avec une DB MongoDB .
 
 1.Si vous n'êtes pas encore inscrit à Mongo Atlas. Créer un nouveau compte.
 /////*************************************///////////////
@@ -23,7 +23,7 @@ sudo apt install npm
 
 nodejs -v
 npm -v
-2)Construire l'application
+##2)Construire l'application
 Pour créer une application, nous devons d'abord lancer le gestionnaire de paquets de nœuds dans le dossier en utilisant:
 npm init
 /////*************************************///////////////
