@@ -30,11 +30,12 @@ app.get("/", (req, res) => {
 });
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+
 var teamRouter = require('./routes/team.route');
 var LoginRouter = require('./routes/auth.route');
 require('./routes/auth.route')(app);
 require('./routes/user.route')(app);
+require('./routes/team.route')(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -48,7 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 
-app.use('/users', usersRouter);
+
 app.use('/team.route', teamRouter);
 app.use('/Login.route', LoginRouter);
 
@@ -69,40 +70,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-function initial() {
-  Role.estimatedDocumentCount((err, count) => {
-    if (!err && count === 0) {
-      new Role({
-        name: "user"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'user' to roles collection");
-      });
-
-      new Role({
-        name: "moderator"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'moderator' to roles collection");
-      });
-
-      new Role({
-        name: "admin"
-      }).save(err => {
-        if (err) {
-          console.log("error", err);
-        }
-
-        console.log("added 'admin' to roles collection");
-      });
-    }
-  });
-}
 
 module.exports = app;

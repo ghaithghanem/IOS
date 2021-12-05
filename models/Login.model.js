@@ -11,7 +11,11 @@ const User = mongoose.model(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Role"
       }
-    ]
+    ],
+    team: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Team"
+    }
   })
 );
 
