@@ -9,9 +9,72 @@ module.exports = function(app) {
     );
     next();
   });
-
+  
   app.get("/api/test/all", controller.allAccess);
+//....................................
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       required:
+ *         - username
+ *         - email
+ *         - password
+ *         - profilePicture
+ *         
+ *       properties:
+ *       username:
+ *           type: string
+ *           description: his username
+ *       email:
+ *           type: string
+ *           description: his email
+ *       password:
+ *           type: string
+ *           description: his password
+ *       profilePicture:
+ *           type: string
+ *           description: his Picture
+ *        
+ *        
+ *
+ *
+ *       example:
+ *         username: ghaitth
+ *         email: gggg@.com 
+ *         password: 7894gg
+ *         profilePicture: lien htt
+ *        
+ */
 
+
+
+
+ /**
+  * @swagger
+ 
+
+ * /getalll:
+ *   description: The users managing API
+ *   get:
+ *     summary: Returns the list of all the users
+ *     tags: [usres]
+ *     responses:
+ *       200:
+ *         description: The list users
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+  *       500:
+ *         description: user error
+ */
+
+  app.get("/getalll", controller.getAll);
   app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 
   app.get(
@@ -25,4 +88,6 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+  app.delete("/:id", controller.delt);
 };
+  

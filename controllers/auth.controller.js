@@ -5,12 +5,14 @@ const Role = db.role;
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
+const { getUser } = require("./user.controller");
 
 exports.signup = (req, res) => {
   const user = new User({
     username: req.body.username,
     email: req.body.email,
-    password: bcrypt.hashSync(req.body.password, 8)
+    password: bcrypt.hashSync(req.body.password, 8),
+    profilePicture: `${req.protocol}://${req.get('host')}/upload/${req.file.filename}`
   });
 
   user.save((err, user) => {
@@ -55,7 +57,7 @@ exports.signup = (req, res) => {
             return;
           }
 
-          res.send({ message: "User was registered successfully!" });
+          res.send({ user: user });
         });
       });
     }
@@ -84,7 +86,6 @@ exports.signin = (req, res) => {
 
       if (!passwordIsValid) {
         return res.status(401).send({
-          accessToken: null,
           message: "Invalid Password!"
         });
       }
@@ -99,11 +100,44 @@ exports.signin = (req, res) => {
         authorities.push("ROLE_" + user.roles[i].name.toUpperCase());
       }
       res.status(200).send({
-        id: user._id,
-        username: user.username,
-        email: user.email,
-        roles: authorities,
+        user:user,
         accessToken: token
       });
     });
 };
+exports.update  = async (req, res) => {
+  let user
+  try {
+    user = await User.findById(req.params.id)
+    if (user == null) {
+      return res.status(404).json({ message: 'Cannot find User' })
+    }
+    else{
+
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message })
+  }
+
+  res.user = user
+  
+  if (req.body.username != null) {
+    res.user.username = req.body.username
+  }
+  if (req.body.email != null) {
+    res.user.email = req.body.email
+  }
+  if (req.body.password != null) {
+    res.user.password = req.body.password
+  }
+  
+  try {
+    const updatedUser = await res.user.save()
+    res.json(updatedUser)
+  } catch (err) {
+    res.status(400).json({ message: err.message })
+  }
+}
+
+
+
