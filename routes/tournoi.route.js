@@ -1,5 +1,5 @@
 const { authJwt } = require("../middleware");
-const controller = require("../controllers/team.controller");
+const controller = require("../controllers/tournoi.controller");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -9,7 +9,6 @@ module.exports = function(app) {
     );
     next();
   });
-
-  app.post("/api/team/create/random/:id", controller.userWithoutTeam);
+  app.post("/api/tournoi/create/random/:id", controller.userWithoutTournoi);
 
 };

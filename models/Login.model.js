@@ -16,7 +16,11 @@ const User = mongoose.model(
     team: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Team"
-    }
+    },
+    tournoi: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Tournoi"
+  }
   })
 );
 

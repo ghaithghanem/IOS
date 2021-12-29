@@ -69,13 +69,13 @@ app.get("/", (req, res) => {
 });
 
 var indexRouter = require('./routes/index');
-
+var tournoiRouter = require('./routes/tournoi.route');
 var teamRouter = require('./routes/team.route');
 var LoginRouter = require('./routes/auth.route');
 require('./routes/auth.route')(app);
 require('./routes/user.route')(app);
 require('./routes/team.route')(app);
-
+require('./routes/tournoi.route')(app);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -88,7 +88,7 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
 app.use('/', indexRouter);
 
-
+app.use('/tournoi.route', tournoiRouter);
 app.use('/team.route', teamRouter);
 app.use('/Login.route', LoginRouter);
 
