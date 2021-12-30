@@ -10,5 +10,5 @@ db.role = require("./role.model");
 db.team = require("./team.model");
 db.tournoi = require("./tournoi.model");
 db.ROLES = ["user", "admin", "moderator"];
-
+db.Token = require("./Token");
 module.exports = db;

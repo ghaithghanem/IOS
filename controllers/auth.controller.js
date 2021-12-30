@@ -1,7 +1,9 @@
 const config = require("../config/auth.config");
 const db = require("../models");
+const Token = db.Token;
 const User = db.user;
 const Role = db.role;
+const nodemailer = require('nodemailer');
 
 var jwt = require("jsonwebtoken");
 var bcrypt = require("bcryptjs");
@@ -127,10 +129,10 @@ exports.update  = async (req, res) => {
   if (req.body.email != null) {
     res.user.email = req.body.email
   }
-  if (req.body.password != null) {
-    res.user.password = req.body.password
-  }
   
+  if (req.file.filename != null) {
+    res.user.profilePicture = `${req.protocol}://${req.get('host')}/upload/${req.file.filename}`
+  }
   try {
     const updatedUser = await res.user.save()
     res.json(updatedUser)
@@ -139,5 +141,101 @@ exports.update  = async (req, res) => {
   }
 }
 
+exports.forgetp = async (req, res, next) => {
 
+  // user is not found into database
+  if (!res.user) {
+      return res.status(400).send({ msg: 'The email entred was not found by our system. Make sure your Email is correct!' });
+  } else {
+      var seq = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
+      var token = new Token ({email:res.user.email , token: seq });
+      token.save(function (err) {
+          if (err) {
+              return res.status(500).send({ msg: err.message });
+          }
+          //res.user.email
+      });
 
+      var smtpTrans = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: "ghghaith127@gmail.com",
+          pass: "25112741*"
+        }
+      });
+
+      var mailOptions = {
+          from: 'ghghaith127@gmail.com', to: res.user.email, subject:
+              'Reset Password', text: 'You receive this email from Baladeyti application bellow you will find a link please click on it\n\n' +
+                    'The code is  :'+ token.token + '\n\n' +
+                  'http:\/\/' + req.headers.host + '\/user\/resetPassword\/' + res.user.email + '\/' + token.token
+                  + '\n\n Si vous n\'avez pas fait cette requete, veuillez ignorer ce message et votre mot de passe sera le méme.\n'
+      };
+      // Send email (use credintials of SendGrid)
+
+      //  var mailOptions = { from: 'no-reply@example.com', to: user.email, subject: 'Account Verification Link', text: 'Hello '+ user.name +',\n\n' + 'Please verify your account by clicking the link: \nhttp:\/\/' + req.headers.host + '\/confirmation\/' + user.email + '\/' + token.token + '\n\nThank You!\n' };
+      smtpTrans.sendMail(mailOptions, function (err) {
+          if (err) {
+              return res.status(500).send({ msg: err });
+          }
+          else {
+              return res.status(200).send({succes:true, 
+                  msg:'A reset password  email has been sent to ' + res.user.email + '. It will be expire after one day. ',
+                  token: token.token
+              })};
+
+      });
+
+  }
+
+};
+
+exports.resetpassword = async (req, res, next) => {
+  Token.findOne({ token: req.params.token }, function (err, token) {
+    // token is not found into database i.e. token may have expired 
+    if (!token) {
+        return res.status(400).send({ msg: 'Your verification link may have expired. Please click on resend for verify your Email.' });
+    }
+    // if token is found then check valid user 
+    else {
+        User.findOne({email: req.params.email }, async function (err, user) {
+            // not valid user
+            if (!user) {
+                return res.status(401).send({ msg: 'We were unable to find a user for this verification. Please SignUp!' });
+            } else {
+  
+                const salt = await bcrypt.genSalt(10);
+                console.log(salt)
+                console.log(req.body.password,"This is the pass")
+                const hashedp = await bcrypt.hash(req.body.password, salt);
+                
+  
+                user.password = hashedp
+  
+                user.save(function (err) {
+                    // error occur
+                    if (err) {
+                        return res.status(500).send({ msg: err.message });
+                    }
+                    // account successfully verified
+                    else {
+                        return res.status(200).json({reponse:'Your password has been successfully reset'});
+                    }
+  
+                })
+  
+            }
+  
+        });
+    }});
+  
+  };
+  
+  
+  
+  
+  /*MiddleWares*/
+  /* Token auth
+  */
+  
+  

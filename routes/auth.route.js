@@ -2,7 +2,7 @@ const { verifySignUp } = require("../middleware");
 const controller = require("../controllers/auth.controller");
 const multer = require("../middleware/multer-config");
 
-
+const getUserByMail = require("../middleware/forgetpasswordd");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -21,8 +21,10 @@ module.exports = function(app) {
     ],
     controller.signup
   );
-  app.patch("/:id", controller.update);
+  app.patch("/:id",multer, controller.update);
   
   app.post("/api/auth/signin", controller.signin);
+  app.post("/forgotPassword",getUserByMail, controller.forgetp);
+  app.post("/resetPassword/:email/:token", controller.resetpassword);
 };
 
