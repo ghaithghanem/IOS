@@ -18,8 +18,6 @@ MongoDB : https://www.mongodb.com/try/download/community <br/>
 MongoDB Compass : https://www.mongodb.com/fr-fr/products/compass  <br/>
 git : https://git-scm.com/downloads <br/>
 Postman : https://www.postman.com/downloads/
-##2)Construire l'application
-
 
 ```python
 -POST est utilisé pour envoyer des données à un serveur pour créer / mettre à jour une ressource.
