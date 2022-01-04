@@ -45,7 +45,7 @@ module.exports = function(app) {
  *         username: ghaitth
  *         email: gggg@.com 
  *         password: 7894gg
- *         profilePicture: lien htt
+ *         profilePicture: lien http
  *        
  */
 
@@ -74,6 +74,7 @@ module.exports = function(app) {
  *         description: user error
  */
 
+
   app.get("/getalll", controller.getAll);
   app.get("/api/test/user", [authJwt.verifyToken], controller.userBoard);
 
@@ -88,6 +89,27 @@ module.exports = function(app) {
     [authJwt.verifyToken, authJwt.isAdmin],
     controller.adminBoard
   );
+ /**
+ * @swagger
+ * /{_id}:
+ *   delete:
+ *     tags:
+ *       - Users
+ *     description: Deletes a user
+ *     produces:
+ *       - application/json
+ *     parameters:
+ *       - name: _id
+ *         description: User Object ID
+ *         in: path
+ *         required: true
+ *     responses:
+ *       200:
+ *         description: Successfully deleted
+ *       500:
+ *         description: Server error
+ */
+     
   app.delete("/:id", controller.delt);
 };
   

@@ -23,8 +23,8 @@ exports.allAccess = (req, res) => {
       res.status(500).json({ message: err.message })
     }
   }
-  exports.delt = (req, res) => {
-    User.findByIdAndDelete(req.params.id)
-      .then(() => res.json('User with id='+req.params.id+' deleted.'))
-      .catch(err => res.status(400).json('Error: ' + err));
+  exports.delt = async (req, res) => {
+      User.findByIdAndDelete(req.params.id)
+    .then(() => res.json('User deleted.'))
+    .catch(err => res.status(400).json('Error: ' + err));
   }

@@ -16,6 +16,7 @@ exports.userWithoutTeam = (req, res) => {
         return;
       }
       var t = {};
+      const results = [];
       var count = 4;
       var i=0;
       var teamNumber = 0;
@@ -27,12 +28,19 @@ exports.userWithoutTeam = (req, res) => {
         //var randomPlayer = users [Math.floor(Math.random()*users.length)];
         
         
-        var randomPlayer = users.splice(Math.floor(Math.random()*users.length),1);
-        var PlayerId = randomPlayer[0]._id;
+        const randomPlayer = users.splice(Math.floor(Math.random()*users.length),1);
+        const PlayerId = randomPlayer[0]._id;
+       
+          
+          if(PlayerId == req.params.id){
+            continue;
+          }
+        
         t.members.push(PlayerId);
+
         //delete randomPlayer;
-        console.log(randomPlayer);
-        console.log(PlayerId);
+        //console.log(randomPlayer);
+        //console.log(PlayerId);
         i++;
         if(i==count && req.params.id  != PlayerId){
 
@@ -46,18 +54,10 @@ exports.userWithoutTeam = (req, res) => {
           Team.populate(team, {path:"members"}, function(err, result) { return res.json(result); });
             teamNumber++;
         }
-        if(i==users.length){
-          t.name = "Team "+teamNumber;
-          const team = new Team({
-            name: t.name,
-            members: t.members
-          });
-          team.save();
-          Team.populate(team, {path:"members"}, function(err, result) { return res.json(result); });
-            teamNumber++;
-         }
+        
+        
       }
+   
     
-     
     });
 };
